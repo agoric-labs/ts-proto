@@ -1,3 +1,39 @@
+# Compatibility with Hardened JS Compartments
+
+**As introduced in https://github.com/protobufjs/protobuf.js/issues/1713 **
+
+The point of this fork is to allow using ts-proto-generated code to function within a [Hardened JS compartment](https://github.com/endojs/endo/tree/master/packages/ses/README.md), such as in a smart contract on the [Agoric](https://agoric.com) blockchain.
+
+Just do:
+
+```sh
+# For NPM:
+npm i -D agoric-labs/ts-proto#Agoric-built
+# For Yarn:
+yarn add -D ts-proto@agoric-labs/ts-proto#Agoric-built
+```
+
+If you don't trust the compiled code, you can browse the [patched source
+tree](https://github.com/agoric-labs/ts-proto/tree/Agoric#readme).  We produced
+`Agoric-built` with:
+
+```sh
+yarn install
+yarn build
+git checkout -B Agoric-built
+git add -f build
+git commit -a -m 'Built by `npm run build`'
+git push -f origin Agoric-built
+```
+
+Have fun,
+The team at [Agoric](https://github.com/Agoric).
+
+---
+
+We now return you to the regularly-scheduled (though slightly outdated) README
+from https://github.com/stephenh/ts-proto#readme:
+
 [![npm](https://img.shields.io/npm/v/ts-proto)](https://www.npmjs.com/package/ts-proto)
 [![build](https://github.com/stephenh/ts-proto/workflows/Build/badge.svg)](https://github.com/stephenh/ts-proto/actions)
 
