@@ -400,13 +400,13 @@ function makeLongUtils(options: Options, bytes: ReturnType<typeof makeByteUtils>
 }
 
 function makeByteUtils() {
-  const globalThis = conditionalOutput(
-    'globalThis',
+  const tsProtoGlobalThis = conditionalOutput(
+    'tsProtoGlobalThis',
     code`
       declare var self: any | undefined;
       declare var window: any | undefined;
       declare var global: any | undefined;
-      var globalThis: any = (() => {
+      var tsProtoGlobalThis: any = (() => {
         if (typeof globalThis !== "undefined") return globalThis;
         if (typeof self !== "undefined") return self;
         if (typeof window !== "undefined") return window;
@@ -419,7 +419,7 @@ function makeByteUtils() {
   const bytesFromBase64 = conditionalOutput(
     'bytesFromBase64',
     code`
-      const atob: (b64: string) => string = ${globalThis}.atob || ((b64) => ${globalThis}.Buffer.from(b64, 'base64').toString('binary'));
+      const atob: (b64: string) => string = ${tsProtoGlobalThis}.atob || ((b64) => ${tsProtoGlobalThis}.Buffer.from(b64, 'base64').toString('binary'));
       function bytesFromBase64(b64: string): Uint8Array {
         const bin = atob(b64);
         const arr = new Uint8Array(bin.length);
@@ -433,7 +433,7 @@ function makeByteUtils() {
   const base64FromBytes = conditionalOutput(
     'base64FromBytes',
     code`
-      const btoa : (bin: string) => string = ${globalThis}.btoa || ((bin) => ${globalThis}.Buffer.from(bin, 'binary').toString('base64'));
+      const btoa : (bin: string) => string = ${tsProtoGlobalThis}.btoa || ((bin) => ${tsProtoGlobalThis}.Buffer.from(bin, 'binary').toString('base64'));
       function base64FromBytes(arr: Uint8Array): string {
         const bin: string[] = [];
         arr.forEach((byte) => {
@@ -443,7 +443,7 @@ function makeByteUtils() {
       }
     `
   );
-  return { globalThis, bytesFromBase64, base64FromBytes };
+  return { globalThis: tsProtoGlobalThis, bytesFromBase64, base64FromBytes };
 }
 
 function makeDeepPartial(options: Options, longs: ReturnType<typeof makeLongUtils>) {
