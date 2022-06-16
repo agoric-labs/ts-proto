@@ -20,7 +20,8 @@
 # Each integration test can optionally have a `parameters.txt` file that will
 # be used as the ts-proto_opt... args for generating that test's code.
 
-INTEGRATION_DIR=$(realpath $(dirname "$BASH_SOURCE"))
+real0=$(readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")
+INTEGRATION_DIR=$(cd "$(dirname -- "$real0")" > /dev/null && pwd -P)
 
 # Run the code generator in parallel. Note this is purposefully pinned to 5 because
 # CI only has 2 cores, but we can go faster than that, and for me locally using all

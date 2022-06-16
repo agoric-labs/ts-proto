@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-PROJECT_ROOT=$(realpath $(dirname "$BASH_SOURCE"))
+real0=$(readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")
+PROJECT_ROOT=$(cd "$(dirname -- "$real0")" > /dev/null && pwd -P)
 PROJECT_ROOT_DOCKER="//ts-proto" # double slash to support git bash on windows
 
 # Alias docker-compose to make it usable from anywhere.

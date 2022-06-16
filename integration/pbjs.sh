@@ -15,19 +15,24 @@
 #   ./pbjs.sh simple value
 #   ./pbjs.sh simple/simple.proto simple-long/simple.proto
 
-INTEGRATION_DIR=$(realpath $(dirname "$BASH_SOURCE"))
+real0=$(readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")
+INTEGRATION_DIR=$(cd "$(dirname -- "$real0")" > /dev/null && pwd -P)
 
 if [[ $# -eq 0 ]]; then
-  FILTER_PATHS="$INTEGRATION_DIR"
+  FILTER_PATHS=("$INTEGRATION_DIR")
 else
-  FILTER_PATHS=$(echo "${@}" | xargs realpath)
+  FILTER_PATHS=()
+  for dir in ${1+"$@"}; do
+    absdir=$(cd "$dir" > /dev/null && pwd -P)
+    FILTER_PATHS+=("$absdir")
+  done
 fi
 
-cd $INTEGRATION_DIR/../
+cd "$INTEGRATION_DIR/../"
 set -e
 
 function match() {
-  find $FILTER_PATHS -path "$INTEGRATION_DIR/$1/*.proto" -type f  | grep -q .
+  find "${FILTER_PATHS[@]}" -path "$INTEGRATION_DIR/$1/*.proto" -type f  | grep -q .
 }
 
 if match "simple"; then

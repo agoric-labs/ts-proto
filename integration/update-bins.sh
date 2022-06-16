@@ -3,8 +3,9 @@
 # To avoid running the protoc pipeline all the time, we capture the incoming Plugin
 # proto requests into .bin PROTO_FILES that then unit tests can pull in directly as needed.
 
-INTEGRATION_DIR=$(realpath $(dirname "$BASH_SOURCE"))
-cd $INTEGRATION_DIR;
+real0=$(readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")
+INTEGRATION_DIR=$(cd "$(dirname -- "$real0")" > /dev/null && pwd -P)
+cd "$INTEGRATION_DIR"
 
 if [[ "$OSTYPE" == "msys" ]]; then
   PLUGIN_PATH="protoc-gen-dump.bat"
